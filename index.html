@@ -1,0 +1,955 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+<meta charset="UTF-8">
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;500;700;900&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+.poster {
+  width: 1080px;
+  background: linear-gradient(145deg, #0F172A, #1E293B);
+  color: #F8FAFC;
+  font-family: 'Noto Sans TC', 'PingFang TC', sans-serif;
+  padding: 64px 56px;
+  position: relative;
+  overflow: hidden;
+}
+
+.poster::before {
+  content: '';
+  position: absolute;
+  top: -200px;
+  right: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(129,140,248,0.06), transparent);
+  pointer-events: none;
+}
+
+.poster::after {
+  content: '';
+  position: absolute;
+  bottom: -300px;
+  left: -200px;
+  width: 600px;
+  height: 600px;
+  background: radial-gradient(circle, rgba(252,211,77,0.04), transparent);
+  pointer-events: none;
+}
+
+/* Header */
+.header {
+  text-align: center;
+  margin-bottom: 48px;
+  position: relative;
+}
+
+.header-badge {
+  display: inline-block;
+  background: rgba(129,140,248,0.15);
+  color: #818CF8;
+  font-size: 16px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  padding: 8px 24px;
+  border-radius: 24px;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.header h1 {
+  font-size: 52px;
+  font-weight: 900;
+  white-space: nowrap;
+  margin-bottom: 12px;
+  background: linear-gradient(135deg, #F8FAFC, #818CF8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.header .subtitle {
+  font-size: 22px;
+  color: #94A3B8;
+  font-weight: 400;
+}
+
+.header .version {
+  font-size: 16px;
+  color: #64748B;
+  margin-top: 8px;
+}
+
+/* Section */
+.section {
+  margin-bottom: 36px;
+}
+
+.section-title {
+  font-size: 28px;
+  font-weight: 900;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.section-title .icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  background: rgba(129,140,248,0.15);
+  border-radius: 12px;
+  font-size: 22px;
+}
+
+.section-title .text {
+  color: #F8FAFC;
+}
+
+/* Divider */
+.divider {
+  height: 1px;
+  background: rgba(255,255,255,0.06);
+  margin: 36px 0;
+}
+
+/* Grid layouts */
+.grid-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.grid-3 {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 16px;
+}
+
+/* Card */
+.card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.card-title {
+  font-size: 18px;
+  font-weight: 700;
+  color: #818CF8;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-title .dot {
+  width: 8px;
+  height: 8px;
+  background: #818CF8;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+/* Code items */
+.code-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 8px;
+  font-size: 17px;
+  line-height: 1.5;
+}
+
+.code-item:last-child { margin-bottom: 0; }
+
+.code-item code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 15px;
+  font-weight: 500;
+  color: #FCD34D;
+  background: rgba(252,211,77,0.1);
+  padding: 2px 8px;
+  border-radius: 6px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.code-item .desc {
+  color: #CBD5E1;
+  font-size: 16px;
+}
+
+/* Table style */
+.ref-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.ref-table th {
+  text-align: left;
+  font-size: 14px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  padding: 8px 12px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+}
+
+.ref-table td {
+  padding: 10px 12px;
+  font-size: 16px;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  vertical-align: top;
+}
+
+.ref-table td:first-child {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #FCD34D;
+  white-space: nowrap;
+}
+
+.ref-table td:last-child {
+  color: #CBD5E1;
+}
+
+.ref-table tr:last-child td {
+  border-bottom: none;
+}
+
+/* Highlight box */
+.highlight-box {
+  background: rgba(129,140,248,0.08);
+  border-left: 4px solid #818CF8;
+  border-radius: 0 12px 12px 0;
+  padding: 20px 24px;
+  margin: 16px 0;
+}
+
+.highlight-box.amber {
+  background: rgba(245,158,11,0.08);
+  border-left-color: #F59E0B;
+}
+
+.highlight-box p {
+  font-size: 17px;
+  color: #CBD5E1;
+  line-height: 1.6;
+}
+
+.highlight-box strong {
+  color: #F8FAFC;
+}
+
+/* Bullet list */
+.bullet-list {
+  list-style: none;
+}
+
+.bullet-list li {
+  font-size: 17px;
+  color: #CBD5E1;
+  line-height: 1.6;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+}
+
+.bullet-list li:last-child { border-bottom: none; }
+
+.bullet-list li .bullet {
+  color: #818CF8;
+  font-weight: 700;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.bullet-list li strong { color: #F8FAFC; }
+
+/* Performance table */
+.perf-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 16px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+  margin-bottom: 8px;
+}
+
+.perf-row:last-child { margin-bottom: 0; }
+
+.perf-label {
+  font-size: 16px;
+  font-weight: 700;
+  color: #F8FAFC;
+  width: 140px;
+  flex-shrink: 0;
+}
+
+.perf-value {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  color: #FCD34D;
+  background: rgba(252,211,77,0.1);
+  padding: 4px 10px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.perf-desc {
+  font-size: 15px;
+  color: #94A3B8;
+}
+
+/* Thinking badges */
+.think-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.think-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+}
+
+.think-level {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  background: #818CF8;
+  padding: 4px 12px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+.think-level.gold {
+  background: #FCD34D;
+}
+
+.think-desc {
+  font-size: 15px;
+  color: #CBD5E1;
+}
+
+/* Effort badges */
+.effort-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.effort-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  background: rgba(255,255,255,0.04);
+  border-radius: 12px;
+}
+
+.effort-badge {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  font-weight: 700;
+  color: #F8FAFC;
+  background: rgba(129,140,248,0.3);
+  padding: 4px 10px;
+  border-radius: 8px;
+  white-space: nowrap;
+}
+
+/* Hook table */
+.hook-row {
+  display: flex;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: flex-start;
+}
+
+.hook-row:last-child { border-bottom: none; }
+
+.hook-name {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  font-weight: 500;
+  color: #FCD34D;
+  width: 180px;
+  flex-shrink: 0;
+}
+
+.hook-use {
+  font-size: 16px;
+  color: #CBD5E1;
+  font-weight: 500;
+  width: 130px;
+  flex-shrink: 0;
+}
+
+.hook-desc {
+  font-size: 15px;
+  color: #94A3B8;
+}
+
+/* Code block */
+.code-block {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 14px;
+  background: rgba(0,0,0,0.3);
+  border: 1px solid rgba(255,255,255,0.08);
+  border-radius: 12px;
+  padding: 18px 22px;
+  line-height: 1.7;
+  color: #E2E8F0;
+  overflow-x: auto;
+}
+
+.code-block .comment { color: #64748B; }
+.code-block .keyword { color: #818CF8; }
+.code-block .string { color: #FCD34D; }
+.code-block .flag { color: #34D399; }
+
+/* Two col text */
+.two-col-text {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+}
+
+/* Footer */
+.footer {
+  margin-top: 48px;
+  padding-top: 24px;
+  border-top: 2px solid rgba(255,255,255,0.06);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.footer-logo {
+  font-size: 22px;
+  font-weight: 800;
+}
+
+.footer-tagline {
+  font-size: 15px;
+  color: #64748B;
+}
+
+.footer-right {
+  font-size: 14px;
+  color: #64748B;
+}
+
+/* Mini label */
+.mini-label {
+  font-size: 13px;
+  font-weight: 700;
+  color: #64748B;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: 10px;
+}
+
+/* Compact list for env vars */
+.env-list {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 6px 20px;
+}
+
+.env-item {
+  font-size: 15px;
+  line-height: 1.5;
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.env-item code {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 13px;
+  color: #FCD34D;
+  white-space: nowrap;
+}
+
+.env-item .desc {
+  color: #94A3B8;
+  font-size: 14px;
+}
+</style>
+</head>
+<body>
+<div class="poster">
+
+<!-- Header -->
+<div class="header">
+  <div class="header-badge">808 AI 五金行 · 進階速查</div>
+  <h1>Claude Code 進階速查表</h1>
+  <div class="subtitle">Advanced / Master Level — 一張圖搞定所有進階用法</div>
+  <div class="version">2026-03 · 資料來源：Anthropic 官方文件 + 社群研究</div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 1: CLI 進階參數 -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">⌨️</span>
+    <span class="text">CLI 進階參數</span>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>常用旗標</div>
+      <div class="code-item"><code>--model &lt;id&gt;</code> <span class="desc">指定模型</span></div>
+      <div class="code-item"><code>-c / --continue</code> <span class="desc">恢復最近對話</span></div>
+      <div class="code-item"><code>--resume &lt;n&gt;</code> <span class="desc">恢復指定 session</span></div>
+      <div class="code-item"><code>--session-id</code> <span class="desc">多輪延續同一 session</span></div>
+      <div class="code-item"><code>--max-turns N</code> <span class="desc">限制最大輪數</span></div>
+      <div class="code-item"><code>--output-format</code> <span class="desc">text / json / stream-json</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>權限 & 安全</div>
+      <div class="code-item"><code>--permission-mode</code> <span class="desc">default / acceptEdits / plan / dontAsk</span></div>
+      <div class="code-item"><code>--allowedTools</code> <span class="desc">白名單指定工具</span></div>
+      <div class="code-item"><code>--disallowedTools</code> <span class="desc">黑名單禁止工具</span></div>
+      <div class="code-item"><code>--dangerously-skip-*</code> <span class="desc">跳過所有確認（= bypass）</span></div>
+    </div>
+  </div>
+  <div style="height:12px"></div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>平行開發</div>
+      <div class="code-item"><code>--worktree / -w</code> <span class="desc">獨立 git worktree</span></div>
+      <div class="code-item"><code>--tmux</code> <span class="desc">獨立 tmux session</span></div>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Headless 模式</div>
+      <div class="code-item"><code>-p "指令"</code> <span class="desc">非互動執行（CI/CD 必備）</span></div>
+      <div class="code-item"><code>cat err | claude -p</code> <span class="desc">Pipe 輸入分析</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 2: 環境變數 -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🔧</span>
+    <span class="text">環境變數（CLAUDE_CODE_ 前綴）</span>
+  </div>
+  <div class="card">
+    <div class="env-list">
+      <div class="env-item"><code>..USE_BEDROCK=1</code> <span class="desc">啟用 AWS Bedrock</span></div>
+      <div class="env-item"><code>..USE_VERTEX=1</code> <span class="desc">啟用 Vertex AI</span></div>
+      <div class="env-item"><code>ANTHROPIC_MODEL</code> <span class="desc">全域預設模型 ID</span></div>
+      <div class="env-item"><code>..DEFAULT_*_MODEL</code> <span class="desc">按角色指定模型</span></div>
+      <div class="env-item"><code>..MAX_TURNS</code> <span class="desc">Headless 最大輪數</span></div>
+      <div class="env-item"><code>..MAX_OUTPUT_TOKENS</code> <span class="desc">單次最大 token（預設 32K）</span></div>
+      <div class="env-item"><code>..AUTOCOMPACT_PCT</code> <span class="desc">自動壓縮觸發 %（~83%）</span></div>
+      <div class="env-item"><code>..DISABLE_NONESSEN*</code> <span class="desc">關閉遙測（離線環境）</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 3: Thinking & Effort -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🧠</span>
+    <span class="text">Thinking 層級 & Effort 模式</span>
+  </div>
+  <div class="grid-2">
+    <div>
+      <div class="mini-label">Thinking（CLI 輸入）</div>
+      <div class="think-grid">
+        <div class="think-item">
+          <span class="think-level">think</span>
+          <span class="think-desc">最低 · 快速回應</span>
+        </div>
+        <div class="think-item">
+          <span class="think-level">think hard</span>
+          <span class="think-desc">中等思考</span>
+        </div>
+        <div class="think-item">
+          <span class="think-level">think harder</span>
+          <span class="think-desc">深度思考</span>
+        </div>
+        <div class="think-item">
+          <span class="think-level gold">ultrathink</span>
+          <span class="think-desc">最大 token 預算</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="mini-label">Effort（/effort 指令）</div>
+      <div class="effort-grid">
+        <div class="effort-item">
+          <span class="effort-badge">low</span>
+          <span class="think-desc">改名 / 錯字</span>
+        </div>
+        <div class="effort-item">
+          <span class="effort-badge">medium</span>
+          <span class="think-desc">日常開發（預設）</span>
+        </div>
+        <div class="effort-item">
+          <span class="effort-badge">high</span>
+          <span class="think-desc">多檔重構</span>
+        </div>
+        <div class="effort-item">
+          <span class="effort-badge">max</span>
+          <span class="think-desc">架構決策（10x token）</span>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="highlight-box amber" style="margin-top:16px">
+    <p>⚠️ 簡單問題用高 effort <strong>不會更好</strong>，只會更慢更貴。選對等級 = 省錢又快。</p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 4: CLAUDE.md -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">📋</span>
+    <span class="text">CLAUDE.md 最佳實踐</span>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>寫法要訣</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">→</span> 控制在 <strong>&lt; 200 行</strong>，超過後遵從率下降</li>
+        <li><span class="bullet">→</span> <strong>MUST / NEVER</strong> 語氣比 Prefer 有效 <strong>3x</strong></li>
+        <li><span class="bullet">→</span> 結構：<strong>WHAT → WHY → HOW</strong></li>
+        <li><span class="bullet">→</span> 每條規則問：移除會犯錯嗎？不會就刪</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>組織技巧</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">→</span> 根目錄 + <strong>子目錄分層放</strong> CLAUDE.md</li>
+        <li><span class="bullet">→</span> <strong>@path</strong> 引入額外檔，避免主檔過長</li>
+        <li><span class="bullet">→</span> <strong>/init</strong> 生成初版，commit 進 git 共維</li>
+        <li><span class="bullet">→</span> 團隊統一規範放 <strong>managed-settings</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 5: Context 管理 -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🎯</span>
+    <span class="text">Context 管理策略</span>
+  </div>
+  <div class="card">
+    <ul class="bullet-list">
+      <li><span class="bullet">💡</span> <strong>70-80% 時手動 /compact</strong>（比自動壓縮品質好）</li>
+      <li><span class="bullet">💡</span> Subagent：主 context 只收 <strong>~2K 摘要</strong>，不會塞爆</li>
+      <li><span class="bullet">💡</span> <strong>停用不用的 MCP</strong>（幾個就吃 30%+ 窗口）</li>
+      <li><span class="bullet">💡</span> 精確路徑比模糊描述 <strong>省 10x context</strong></li>
+      <li><span class="bullet">💡</span> <strong>30-45 分鐘 session</strong> 優於馬拉松 session</li>
+      <li><span class="bullet">💡</span> prompt 加 <strong>use subagents</strong> → 投入更多算力</li>
+    </ul>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 6: Workflow -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">⚡</span>
+    <span class="text">Workflow 高手技</span>
+  </div>
+  <div class="grid-3">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Plan → 自動執行</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">1</span> 先用 Plan 模式討論</li>
+        <li><span class="bullet">2</span> 滿意 → 切 auto-accept</li>
+        <li><span class="bullet">3</span> Ctrl+G 外部編輯 plan</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>平行 Session</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">•</span> 每 session 一個 branch</li>
+        <li><span class="bullet">•</span> <strong>絕不共用 branch</strong></li>
+        <li><span class="bullet">•</span> <code style="font-family:'JetBrains Mono';font-size:13px;color:#FCD34D;background:rgba(252,211,77,0.1);padding:2px 6px;border-radius:4px">-w feat-x --tmux</code></li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>三層架構</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">T1</span> <strong>互動開發</strong>（你在旁邊）</li>
+        <li><span class="bullet">T2</span> <strong>平行衝刺</strong>（多 session）</li>
+        <li><span class="bullet">T3</span> <strong>批次 CI</strong>（全自動）</li>
+      </ul>
+    </div>
+  </div>
+  <div class="highlight-box" style="margin-top:16px">
+    <p>🔑 <strong>驗證 = 品質倍增器</strong> — 給 Claude 驗證方法（test / lint / type-check），品質提升 <strong>2-3x</strong></p>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 7: Hooks -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🪝</span>
+    <span class="text">Hooks 自動化</span>
+  </div>
+  <div class="card">
+    <div class="hook-row">
+      <span class="hook-name">PostToolUse</span>
+      <span class="hook-use">格式化</span>
+      <span class="hook-desc">寫檔後自動跑 prettier / eslint</span>
+    </div>
+    <div class="hook-row">
+      <span class="hook-name">PreToolUse</span>
+      <span class="hook-use">安全閘門</span>
+      <span class="hook-desc">攔截危險指令（rm -rf 之類）</span>
+    </div>
+    <div class="hook-row">
+      <span class="hook-name">Notification</span>
+      <span class="hook-use">Webhook</span>
+      <span class="hook-desc">完成後推 Slack / Discord 通知</span>
+    </div>
+    <div class="hook-row">
+      <span class="hook-name">PostToolUse</span>
+      <span class="hook-use">自動 stage</span>
+      <span class="hook-desc">改檔後自動 git add</span>
+    </div>
+    <div style="margin-top:12px;font-size:15px;color:#94A3B8">
+      Exit code：<code style="font-family:'JetBrains Mono';font-size:13px;color:#34D399">0</code> = 允許　
+      <code style="font-family:'JetBrains Mono';font-size:13px;color:#F87171">1</code> = 錯誤　
+      <code style="font-family:'JetBrains Mono';font-size:13px;color:#FCD34D">2</code> = 阻擋 + 回饋 stderr
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 8: Agent Teams & SDK -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">👥</span>
+    <span class="text">Agent Teams & SDK</span>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>多代理協作</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">→</span> Lead 分配 <strong>3-5 teammates</strong> 獨立 branch</li>
+        <li><span class="bullet">→</span> <strong>Ctrl+T</strong> 共享 Task List + Mailbox 溝通</li>
+        <li><span class="bullet">→</span> <code style="font-family:'JetBrains Mono';font-size:13px;color:#FCD34D;background:rgba(252,211,77,0.1);padding:2px 6px;border-radius:4px">.claude/agents/*.md</code> 設定 model / tools</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>SDK 程式化控制</div>
+      <div class="code-block">
+<span class="comment">// TypeScript</span>
+<span class="keyword">import</span> {query} <span class="keyword">from</span> <span class="string">"@anthropic-ai/claude-code"</span>
+<span class="keyword">await</span> query({
+  prompt: <span class="string">"Fix"</span>,
+  permissionMode: <span class="string">"dontAsk"</span>
+})
+
+<span class="comment"># Python 多輪對話</span>
+<span class="keyword">from</span> claude_code <span class="keyword">import</span> Session
+s = Session()
+s.query(<span class="string">"分析"</span>); s.query(<span class="string">"修改"</span>)
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 9: CI/CD & Enterprise -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🏢</span>
+    <span class="text">CI/CD & 企業功能</span>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>GitHub Actions</div>
+      <div class="code-block" style="font-size:13px">
+- uses: anthropics/claude-code-action@v1
+  with:
+    anthropic_api_key: ${{secrets.KEY}}
+      </div>
+      <ul class="bullet-list" style="margin-top:12px">
+        <li><span class="bullet">→</span> 自動 PR review + diff 分析</li>
+        <li><span class="bullet">→</span> Pin by commit SHA，目標 &lt; 3-5 分鐘</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>企業管理</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">→</span> <strong>managed-settings</strong> 組織級強制設定</li>
+        <li><span class="bullet">→</span> <strong>modelOverrides</strong> → Bedrock / Vertex 映射</li>
+        <li><span class="bullet">→</span> <strong>SSO</strong> SAML / OIDC 企業身份驗證</li>
+        <li><span class="bullet">→</span> <strong>RBAC</strong> Owner / Admin / Member</li>
+        <li><span class="bullet">→</span> <strong>Audit Log</strong> SOC 2 Type II 合規</li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 10: 效能速查 -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🚀</span>
+    <span class="text">效能速查 — 什麼情況用什麼配置</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">📝 日常單檔</span>
+    <span class="perf-value">Sonnet + medium</span>
+    <span class="perf-desc">快速、便宜、夠用</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">🔨 多檔重構</span>
+    <span class="perf-value">Opus + high + Plan</span>
+    <span class="perf-desc">先想再做</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">🏗️ 架構決策</span>
+    <span class="perf-value">Opus + ultrathink</span>
+    <span class="perf-desc">最大腦力，不省這個</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">🔍 大量研究</span>
+    <span class="perf-value">use subagents</span>
+    <span class="perf-desc">平行搜尋，主 context 乾淨</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">🐛 Debug 卡關</span>
+    <span class="perf-value">think harder + 完整錯誤</span>
+    <span class="perf-desc">貼完整 log，不要截斷</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">🤖 CI/CD</span>
+    <span class="perf-value">headless + json</span>
+    <span class="perf-desc">自動化流水線</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">⚡ 平行開發</span>
+    <span class="perf-value">worktree + tmux</span>
+    <span class="perf-desc">多 session 同時衝</span>
+  </div>
+  <div class="perf-row">
+    <span class="perf-label">✏️ 改名/錯字</span>
+    <span class="perf-value">Haiku + low</span>
+    <span class="perf-desc">殺雞不用牛刀</span>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 11: Debug & Review -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🔬</span>
+    <span class="text">Debug & Code Review</span>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Debug 高效流程</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">1</span> <strong>Director Mode</strong>：給目標不是給步驟</li>
+        <li><span class="bullet">2</span> 貼<strong>完整錯誤訊息</strong> + 檔案路徑</li>
+        <li><span class="bullet">3</span> 卡住 → <strong>think harder / ultrathink</strong></li>
+        <li><span class="bullet">4</span> 讓 Claude 自己讀日誌、跑測試、追 trace</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>Code Review</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">→</span> GitHub integration 自動審查 PR</li>
+        <li><span class="bullet">→</span> <strong>REVIEW.md</strong> 自訂審查範圍和規則</li>
+        <li><span class="bullet">→</span> 大 PR 1000+ 行：84% 被標記</li>
+        <li><span class="bullet">→</span> 平均每次 <strong>7.5 個發現</strong></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- Section 12: 安全 & 自訂指令 -->
+<div class="section">
+  <div class="section-title">
+    <span class="icon">🔒</span>
+    <span class="text">安全與自訂指令</span>
+  </div>
+  <div class="grid-2">
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>權限優先順序</div>
+      <div class="highlight-box" style="margin:0">
+        <p><strong>deny > ask > allow</strong>（deny 永遠優先）</p>
+      </div>
+      <ul class="bullet-list" style="margin-top:12px">
+        <li><span class="bullet">→</span> defaultMode: default / acceptEdits / plan / bypass</li>
+        <li><span class="bullet">→</span> 團隊用 <strong>managed-settings.json</strong> 強制統一</li>
+      </ul>
+    </div>
+    <div class="card">
+      <div class="card-title"><span class="dot"></span>自訂指令進階</div>
+      <ul class="bullet-list">
+        <li><span class="bullet">→</span> 支援 <strong>$1 $2 $ARGUMENTS</strong> 位置引數</li>
+        <li><span class="bullet">→</span> frontmatter 可指定 <strong>allowed-tools</strong></li>
+        <li><span class="bullet">→</span> 存放：<code style="font-family:'JetBrains Mono';font-size:13px;color:#FCD34D">.claude/commands/*.md</code></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <div class="footer-left">
+    <span class="footer-logo">🦞 808 AI 五金行</span>
+    <span class="footer-tagline">拿了工具，立刻解決問題</span>
+  </div>
+  <div class="footer-right">
+    Claude Code Advanced Cheat Sheet · 2026-03
+  </div>
+</div>
+
+</div>
+</body>
+</html>
